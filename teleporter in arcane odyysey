@@ -1,0 +1,27 @@
+local Islands = {}
+for i,v in ipairs(game.Workspace.Map:GetChildren()) do 
+    if v:FindFirstChild("DetailsLoaded") and not table.find(Islands, v.Name) then 
+        table.insert(Islands, v.Name)
+        table.sort(Islands)
+    end;
+end;
+
+TeleportSection:AddDropdown({
+    Name = "Select a Place to Teleport",
+    List = Islands,
+    Callback = function(x)
+        Settings.TeleportTo = x;
+    end;
+})
+
+TeleportSection:AddButton({
+    Name = "Teleport to Island",
+    Callback = function()
+        load(game.Workspace.Map:FindFirstChild(Settings.TeleportTo).Center.Position, false)
+        for i,v in ipairs(game.Workspace.Map:FindFirstChild(Settings.TeleportTo):GetChildren()) do 
+            if v.Name == "Notes" and v:FindFirstChild("Note") then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v:FindFirstChild("Note").Note.CFrame
+            end;
+        end;
+    end;
+})
